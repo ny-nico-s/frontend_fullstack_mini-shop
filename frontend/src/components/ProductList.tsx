@@ -5,6 +5,10 @@ interface ProductListProps {
 }
 
 function ProductList({ products }: ProductListProps) {
+  if (products.length === 0) {
+    return <p>Noch keine Produkte erfasst</p>
+  }
+
   return (
     <ul className="product-list">
       {products.map((product) => (
