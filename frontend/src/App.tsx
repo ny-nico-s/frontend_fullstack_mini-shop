@@ -12,7 +12,6 @@ function App() {
   function loadProducts() {
     fetchProducts()
       .then((loadedProducts) => {
-        console.log('Produkte vom Backend:', loadedProducts)
         setProducts(loadedProducts)
         setErrorMessage('')
       })
