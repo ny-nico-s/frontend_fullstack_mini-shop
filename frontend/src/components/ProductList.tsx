@@ -1,3 +1,4 @@
+import './ProductList.css'
 import type { Product } from '../types'
 
 interface ProductListProps {
