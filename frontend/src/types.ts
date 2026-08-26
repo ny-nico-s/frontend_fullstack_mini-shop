@@ -10,3 +10,10 @@ export interface Product {
   stock: number
   category: Category
 }
+
+export interface NewProduct {
+  name: string
+  price: number
+  stock: number
+  category: { id: number }
+}
