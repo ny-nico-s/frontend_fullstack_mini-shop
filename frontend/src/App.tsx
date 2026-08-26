@@ -5,6 +5,7 @@ import type { Product } from './types'
 
 function App() {
   const [products, setProducts] = useState<Product[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     fetchProducts()
@@ -13,12 +14,13 @@ function App() {
         setProducts(loadedProducts)
       })
       .catch((error) => console.error('Laden fehlgeschlagen:', error))
+      .finally(() => setIsLoading(false))
   }, [])
 
   return (
     <main>
       <h1>MiniShop</h1>
-      <ProductList products={products} />
+      {isLoading ? <p>Wird geladen…</p> : <ProductList products={products} />}
     </main>
   )
 }
