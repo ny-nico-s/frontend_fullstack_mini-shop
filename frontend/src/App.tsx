@@ -6,6 +6,7 @@ import type { Product } from './types'
 function App() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     fetchProducts()
@@ -13,14 +14,18 @@ function App() {
         console.log('Produkte vom Backend:', loadedProducts)
         setProducts(loadedProducts)
       })
-      .catch((error) => console.error('Laden fehlgeschlagen:', error))
+      .catch(() => {
+        setErrorMessage('Die Produkte konnten nicht geladen werden. Läuft das Backend auf http://localhost:8080?')
+      })
       .finally(() => setIsLoading(false))
   }, [])
 
   return (
     <main>
       <h1>MiniShop</h1>
-      {isLoading ? <p>Wird geladen…</p> : <ProductList products={products} />}
+      {isLoading && <p>Wird geladen…</p>}
+      {!isLoading && errorMessage !== '' && <p className="error-message">{errorMessage}</p>}
+      {!isLoading && errorMessage === '' && <ProductList products={products} />}
     </main>
   )
 }
