@@ -4,3 +4,22 @@ body {
   color: #1f2933;
   background: #f7f8fa;
 }
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+
+h1 {
+  font-size: 28px;
+  margin: 0 0 24px;
+}
+
+.error-message {
+  background: #fdecea;
+  border: 1px solid #f0b4ae;
+  border-radius: 8px;
+  color: #8a1c13;
+  padding: 16px;
+}
