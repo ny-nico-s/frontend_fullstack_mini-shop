@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { fetchCategories } from '../api/categories'
-import { createProduct } from '../api/products'
-import type { Category } from '../types'
+import { createProduct, updateProduct } from '../api/products'
+import type { Category, Product } from '../types'
 import './ProductForm.css'
 
 interface ProductFormProps {
-  onProductCreated: () => void
+  productToEdit: Product | null
+  onSaved: () => void
+  onCancel: () => void
 }
 
-function ProductForm({ onProductCreated }: ProductFormProps) {
+function ProductForm({ productToEdit, onSaved, onCancel }: ProductFormProps) {
   const [categories, setCategories] = useState<Category[]>([])
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
-  const [stock, setStock] = useState('')
-  const [categoryId, setCategoryId] = useState('')
+  const [name, setName] = useState(productToEdit === null ? '' : productToEdit.name)
+  const [price, setPrice] = useState(productToEdit === null ? '' : productToEdit.price.toFixed(2))
+  const [stock, setStock] = useState(productToEdit === null ? '' : String(productToEdit.stock))
+  const [categoryId, setCategoryId] = useState(productToEdit === null ? '' : String(productToEdit.category.id))
   const [formError, setFormError] = useState('')
   const [isSaving, setIsSaving] = useState(false)
 
@@ -29,26 +31,25 @@ function ProductForm({ onProductCreated }: ProductFormProps) {
     setFormError('')
     setIsSaving(true)
 
-    createProduct({
+    const productData = {
       name: name,
       price: Number(price),
       stock: Number(stock),
       category: { id: Number(categoryId) },
-    })
-      .then(() => {
-        setName('')
-        setPrice('')
-        setStock('')
-        setCategoryId('')
-        onProductCreated()
-      })
+    }
+
+    const request =
+      productToEdit === null ? createProduct(productData) : updateProduct(productToEdit.id, productData)
+
+    request
+      .then(() => onSaved())
       .catch(() => setFormError('Das Produkt konnte nicht gespeichert werden.'))
       .finally(() => setIsSaving(false))
   }
 
   return (
     <form className="product-form" onSubmit={handleSubmit}>
-      <h2>Neues Produkt</h2>
+      <h2>{productToEdit === null ? 'Neues Produkt' : 'Produkt bearbeiten'}</h2>
 
       <label htmlFor="product-name">Name</label>
       <input
@@ -96,9 +97,14 @@ function ProductForm({ onProductCreated }: ProductFormProps) {
         ))}
       </select>
 
-      <button type="submit" disabled={isSaving}>
-        {isSaving ? 'Wird gespeichert…' : 'Produkt speichern'}
-      </button>
+      <div className="product-form-buttons">
+        <button type="submit" disabled={isSaving}>
+          {isSaving ? 'Wird gespeichert…' : 'Speichern'}
+        </button>
+        <button type="button" className="secondary-button" onClick={onCancel}>
+          Abbrechen
+        </button>
+      </div>
 
       {formError !== '' && <p className="error-message">{formError}</p>}
     </form>

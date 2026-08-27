@@ -26,10 +26,14 @@
   border-radius: 6px;
 }
 
+.product-form-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .product-form button {
   font: inherit;
-  justify-self: start;
-  margin-top: 8px;
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
@@ -41,4 +45,13 @@
 .product-form button:disabled {
   background: #9db6ef;
   cursor: default;
+}
+
+.product-form .secondary-button {
+  background: #eceff3;
+  color: #1f2933;
+}
+
+.product-form .secondary-button:hover {
+  background: #dfe4ea;
 }
