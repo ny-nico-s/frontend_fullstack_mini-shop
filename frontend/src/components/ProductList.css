@@ -12,6 +12,16 @@
   border: 1px solid #e2e6eb;
   border-radius: 8px;
   padding: 16px;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  border-color: #2f6feb;
+}
+
+.product-card.selected {
+  border-color: #2f6feb;
+  box-shadow: 0 0 0 2px #d3e0fb;
 }
 
 .product-name {

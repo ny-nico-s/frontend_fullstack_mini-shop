@@ -13,7 +13,24 @@ main {
 
 h1 {
   font-size: 28px;
-  margin: 0 0 24px;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.create-button {
+  font: inherit;
+  display: block;
+  margin: 0 auto 32px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #2f6feb;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.create-button:hover {
+  background: #2559c4;
 }
 
 .error-message {

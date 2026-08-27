@@ -8,6 +8,8 @@ function App() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+  const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
+  const [productToEdit, setProductToEdit] = useState<Product | null>(null)
 
   function loadProducts() {
     fetchProducts()
@@ -31,18 +33,65 @@ function App() {
     }
 
     deleteProduct(productId)
-      .then(() => loadProducts())
+      .then(() => {
+        setProductToEdit(null)
+        loadProducts()
+      })
       .catch(() => setErrorMessage('Das Produkt konnte nicht gelöscht werden.'))
+  }
+
+  function handleCreateButtonClick() {
+    setProductToEdit(null)
+    setIsCreateFormOpen(true)
+  }
+
+  function handleSelectProduct(product: Product) {
+    setIsCreateFormOpen(false)
+    setProductToEdit(product)
+  }
+
+  function handleSaved() {
+    setIsCreateFormOpen(false)
+    setProductToEdit(null)
+    loadProducts()
   }
 
   return (
     <main>
       <h1>MiniShop</h1>
-      <ProductForm onProductCreated={loadProducts} />
+
+      {!isCreateFormOpen && productToEdit === null && (
+        <button type="button" className="create-button" onClick={handleCreateButtonClick}>
+          Neues Produkt erfassen
+        </button>
+      )}
+
+      {isCreateFormOpen && (
+        <ProductForm
+          productToEdit={null}
+          onSaved={handleSaved}
+          onCancel={() => setIsCreateFormOpen(false)}
+        />
+      )}
+
+      {productToEdit !== null && (
+        <ProductForm
+          key={productToEdit.id}
+          productToEdit={productToEdit}
+          onSaved={handleSaved}
+          onCancel={() => setProductToEdit(null)}
+        />
+      )}
+
       {isLoading && <p>Wird geladen…</p>}
       {!isLoading && errorMessage !== '' && <p className="error-message">{errorMessage}</p>}
       {!isLoading && errorMessage === '' && (
-        <ProductList products={products} onDeleteProduct={handleDeleteProduct} />
+        <ProductList
+          products={products}
+          selectedProductId={productToEdit === null ? null : productToEdit.id}
+          onSelectProduct={handleSelectProduct}
+          onDeleteProduct={handleDeleteProduct}
+        />
       )}
     </main>
   )

@@ -16,3 +16,11 @@ export function createProduct(newProduct: NewProduct): Promise<Product> {
 export function deleteProduct(productId: number): Promise<void> {
   return requestWithoutResponseBody('/products/' + productId, { method: 'DELETE' })
 }
+
+export function updateProduct(productId: number, product: NewProduct): Promise<Product> {
+  return requestJson<Product>('/products/' + productId, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(product),
+  })
+}
